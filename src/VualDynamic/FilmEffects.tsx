@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill, useCurrentFrame, staticFile } from "remotion";
 import type { FilmEffects, EffectLevel } from "./schema";
 
 // ── Strength maps ───────────────────────────────────────
@@ -84,32 +84,18 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
         />
       )}
 
-      {/* Grain — animated SVG noise (updates every 4 frames for performance) */}
+      {/* Grain — static noise texture with animated offset (near-zero CPU cost) */}
       {grainOpacity > 0 && (
-        <AbsoluteFill style={{ opacity: grainOpacity }}>
-          <svg
-            width="100%"
-            height="100%"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ display: "block" }}
-          >
-            <filter id="grain">
-              <feTurbulence
-                type="fractal"
-                baseFrequency="0.7"
-                numOctaves={1}
-                seed={Math.floor(frame / 4)}
-                stitchTiles="noStitch"
-              />
-              <feColorMatrix type="saturate" values="0" />
-            </filter>
-            <rect
-              width="100%"
-              height="100%"
-              filter="url(#grain)"
-            />
-          </svg>
-        </AbsoluteFill>
+        <AbsoluteFill
+          style={{
+            opacity: grainOpacity,
+            backgroundImage: `url(${staticFile("grain.png")})`,
+            backgroundSize: "256px 256px",
+            backgroundRepeat: "repeat",
+            backgroundPosition: `${(frame * 37) % 256}px ${(frame * 53) % 256}px`,
+            mixBlendMode: "overlay",
+          }}
+        />
       )}
 
       {/* Color Shift — shadow tint (cool) + highlight tint (warm) */}
