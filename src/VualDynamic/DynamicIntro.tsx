@@ -8,6 +8,7 @@ import {
   Img,
   staticFile,
 } from "remotion";
+import { getFontFamily } from "./fonts";
 
 const FPS = 24;
 
@@ -95,20 +96,6 @@ const FlatLayItem: React.FC<{
     </div>
   );
 };
-
-// ─── Font mapping ────────────────────────────────────────────────────────────
-
-function getFontFamily(textFont: string): string {
-  switch (textFont) {
-    case "noto-sans":
-      return "'Noto Sans JP', 'Noto Sans', sans-serif";
-    case "montserrat":
-      return "'Montserrat', sans-serif";
-    case "impact":
-    default:
-      return "'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif";
-  }
-}
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 

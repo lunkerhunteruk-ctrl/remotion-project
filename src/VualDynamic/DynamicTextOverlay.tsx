@@ -1,15 +1,7 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
 import type { VualDynamicProps, ShotConfig } from "./schema";
-
-/**
- * Font family map for text overlays.
- */
-const FONT_MAP: Record<string, string> = {
-  impact: "'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif",
-  "noto-sans": "'Noto Sans JP', 'Noto Sans', sans-serif",
-  montserrat: "'Montserrat', 'Helvetica Neue', sans-serif",
-};
+import { FONT_MAP } from "./fonts";
 
 /**
  * Position map for telop placement.

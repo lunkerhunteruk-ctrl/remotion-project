@@ -26,7 +26,7 @@ export const filmEffectsSchema = z.object({
 export const vualDynamicSchema = z.object({
   shots: z.array(shotSchema),
   textStyle: z.enum(["slide", "shuffle", "minimal"]).default("slide"),
-  textFont: z.enum(["impact", "noto-sans", "montserrat"]).default("impact"),
+  textFont: z.enum(["impact", "noto-sans", "montserrat", "playfair-display", "cormorant-garamond", "dm-serif-display"]).default("impact"),
   bgmUrl: z.string().optional(),
   showIntro: z.boolean().default(false),
   introStyle: z.enum(["flatlay", "text-only"]).default("flatlay"),

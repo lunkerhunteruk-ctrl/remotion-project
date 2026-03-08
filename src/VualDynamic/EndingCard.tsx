@@ -1,11 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
-
-const FONT_MAP: Record<string, string> = {
-  impact: "'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif",
-  "noto-sans": "'Noto Sans JP', 'Noto Sans', sans-serif",
-  montserrat: "'Montserrat', 'Helvetica Neue', sans-serif",
-};
+import { FONT_MAP } from "./fonts";
 
 /**
  * Ending card with brand name and tagline.
