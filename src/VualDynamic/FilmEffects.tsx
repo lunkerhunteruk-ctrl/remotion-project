@@ -84,7 +84,7 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
         />
       )}
 
-      {/* Grain — animated SVG noise */}
+      {/* Grain — animated SVG noise (updates every 4 frames for performance) */}
       {grainOpacity > 0 && (
         <AbsoluteFill style={{ opacity: grainOpacity }}>
           <svg
@@ -93,20 +93,20 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
             xmlns="http://www.w3.org/2000/svg"
             style={{ display: "block" }}
           >
-            <filter id={`grain-${frame % 3}`}>
+            <filter id="grain">
               <feTurbulence
                 type="fractal"
-                baseFrequency="0.65"
-                numOctaves={3}
-                seed={frame}
-                stitchTiles="stitch"
+                baseFrequency="0.7"
+                numOctaves={1}
+                seed={Math.floor(frame / 4)}
+                stitchTiles="noStitch"
               />
               <feColorMatrix type="saturate" values="0" />
             </filter>
             <rect
               width="100%"
               height="100%"
-              filter={`url(#grain-${frame % 3})`}
+              filter="url(#grain)"
             />
           </svg>
         </AbsoluteFill>
