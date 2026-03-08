@@ -1,0 +1,49 @@
+{
+  "generated": "2026-02-19T01:32:48.478Z",
+  "captions": [
+    {
+      "id": "caption_01",
+      "text": "今日は簡単レシピを紹介します",
+      "startFrame": 0,
+      "durationFrames": 90,
+      "audioFile": "/audio/caption_01.mp3"
+    },
+    {
+      "id": "caption_02",
+      "text": "まず材料を準備しましょう",
+      "startFrame": 100,
+      "durationFrames": 75,
+      "audioFile": "/audio/caption_02.mp3"
+    },
+    {
+      "id": "caption_03",
+      "text": "フライパンで炒めていきます",
+      "startFrame": 185,
+      "durationFrames": 75,
+      "audioFile": "/audio/caption_03.mp3"
+    },
+    {
+      "id": "caption_04",
+      "text": "完成です！いただきます",
+      "startFrame": 270,
+      "durationFrames": 90,
+      "audioFile": "/audio/caption_04.mp3"
+    }
+  ],
+  "soundEffects": [
+    {
+      "id": "tap_sound",
+      "prompt": "soft elegant tap sound, gentle click, subtle UI feedback",
+      "startFrame": 95,
+      "durationFrames": 15,
+      "audioFile": "/audio/tap_sound.mp3"
+    },
+    {
+      "id": "sizzle_sound",
+      "prompt": "sizzling frying pan cooking sound, oil crackling",
+      "startFrame": 185,
+      "durationFrames": 60,
+      "audioFile": "/audio/sizzle_sound.mp3"
+    }
+  ]
+}

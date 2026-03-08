@@ -56,27 +56,18 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  const vignetteStrength = VIGNETTE_STRENGTH[effects.vignette];
-  const chromeBlueOpacity = CHROME_BLUE_OPACITY[effects.colorChromeBlue];
-  const grainOpacity = GRAIN_OPACITY[effects.grain];
-  const colorShiftOpacity = COLOR_SHIFT_OPACITY[effects.colorShift];
-
-  const hasAny =
-    vignetteStrength > 0 ||
-    chromeBlueOpacity > 0 ||
-    grainOpacity > 0 ||
-    colorShiftOpacity > 0;
-
-  if (!hasAny) return null;
+  const vignetteStrength = VIGNETTE_STRENGTH[effects.vignette] ?? 0;
+  const chromeBlueOpacity = CHROME_BLUE_OPACITY[effects.colorChromeBlue] ?? 0;
+  const grainOpacity = GRAIN_OPACITY[effects.grain] ?? 0;
+  const colorShiftOpacity = COLOR_SHIFT_OPACITY[effects.colorShift] ?? 0;
 
   return (
-    <>
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
       {/* Vignette — radial gradient darkening at edges */}
       {vignetteStrength > 0 && (
         <AbsoluteFill
           style={{
             background: `radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,${vignetteStrength}) 100%)`,
-            pointerEvents: "none",
           }}
         />
       )}
@@ -89,14 +80,13 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
               "linear-gradient(180deg, rgba(40,80,140,0) 0%, rgba(40,80,140,1) 100%)",
             opacity: chromeBlueOpacity,
             mixBlendMode: "soft-light",
-            pointerEvents: "none",
           }}
         />
       )}
 
       {/* Grain — animated SVG noise */}
       {grainOpacity > 0 && (
-        <AbsoluteFill style={{ pointerEvents: "none", opacity: grainOpacity }}>
+        <AbsoluteFill style={{ opacity: grainOpacity }}>
           <svg
             width="100%"
             height="100%"
@@ -125,28 +115,24 @@ export const FilmEffectsOverlay: React.FC<{ effects: FilmEffects }> = ({
       {/* Color Shift — shadow tint (cool) + highlight tint (warm) */}
       {colorShiftOpacity > 0 && (
         <>
-          {/* Shadow: greenish-blue tint in dark areas */}
           <AbsoluteFill
             style={{
               background:
                 "linear-gradient(180deg, transparent 30%, rgba(30,80,70,1) 100%)",
               opacity: colorShiftOpacity,
               mixBlendMode: "lighten",
-              pointerEvents: "none",
             }}
           />
-          {/* Highlight: warm amber tint in bright areas */}
           <AbsoluteFill
             style={{
               background:
                 "linear-gradient(180deg, rgba(255,220,180,1) 0%, transparent 60%)",
               opacity: colorShiftOpacity * 0.7,
               mixBlendMode: "multiply",
-              pointerEvents: "none",
             }}
           />
         </>
       )}
-    </>
+    </AbsoluteFill>
   );
 };

@@ -144,6 +144,7 @@ export const DynamicTextOverlay: React.FC<{
   textFont: VualDynamicProps["textFont"];
 }> = ({ shot, shotIndex, localStartFrame, durationFrames, textStyle, textFont }) => {
   const frame = useCurrentFrame();
+  const { height: canvasH, width: canvasW } = useVideoConfig();
   const fontFamily = FONT_MAP[textFont] || FONT_MAP.impact;
 
   if (!shot.telopText) return null;
@@ -203,8 +204,6 @@ export const DynamicTextOverlay: React.FC<{
       </div>
     );
   }
-
-  const { height: canvasH, width: canvasW } = useVideoConfig();
   const sc = canvasW / 1920;
 
   if (textStyle === "slide") {
