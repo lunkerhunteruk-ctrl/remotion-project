@@ -1,0 +1,65 @@
+{
+  "title": "ピタレシ - 高速・課題解決型",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "totalDurationFrames": 450,
+  "scenes": [
+    {
+      "id": "scene_01",
+      "video": "01.mp4",
+      "startFrame": 0,
+      "durationFrames": 60,
+      "displayText": "余り物が、神レシピに！？",
+      "speechText": "あまりものが、かみレシピに！？"
+    },
+    {
+      "id": "scene_02",
+      "video": "02.mp4",
+      "startFrame": 60,
+      "durationFrames": 60,
+      "displayText": "毎日の献立、考えるのしんどい…",
+      "speechText": "こんだて、かんがえるの、しんどい…"
+    },
+    {
+      "id": "scene_03",
+      "video": "ss01.mov",
+      "startFrame": 120,
+      "durationFrames": 150,
+      "playbackRate": 4.0,
+      "displayText": "ピタレシなら具材を選ぶだけ！",
+      "speechText": "ピタレシなら、ぐざいをえらぶだけ！",
+      "ripples": [
+        { "frame": 15, "x": 540, "y": 800 },
+        { "frame": 35, "x": 540, "y": 1000 },
+        { "frame": 55, "x": 540, "y": 1200 },
+        { "frame": 80, "x": 540, "y": 900 },
+        { "frame": 100, "x": 540, "y": 1100 },
+        { "frame": 120, "x": 540, "y": 850 }
+      ]
+    },
+    {
+      "id": "scene_04",
+      "video": "03.mp4",
+      "startFrame": 270,
+      "durationFrames": 90,
+      "displayText": "プロの技で、サッと完成！",
+      "speechText": "プロのわざで、サッとかんせい！"
+    },
+    {
+      "id": "scene_05",
+      "video": "04.mp4",
+      "startFrame": 360,
+      "durationFrames": 90,
+      "displayText": "おいしいを記録しよう\nピタレシで検索🔍",
+      "speechText": "おいしいをきろく、ピタレシ！",
+      "endCard": true
+    }
+  ],
+  "theme": {
+    "primaryColor": "#FF6B35",
+    "backgroundColor": "#1a1a1a",
+    "textColor": "#FFFFFF",
+    "accentColor": "#FFE66D"
+  }
+}

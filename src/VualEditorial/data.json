@@ -1,0 +1,92 @@
+{
+  "bundle_id": "23ccca90-c291-4081-a186-653c80ad5a84",
+  "total_shots": 6,
+  "total_duration_sec": 34,
+  "fps": 30,
+  "shots": [
+    {
+      "shot": 1,
+      "title_ja": "路地の静寂",
+      "caption_ja": "古都の朝の静けさ",
+      "caption_en": "Quiet morning in the ancient city",
+      "video": "videos/vual-editorial-01/veo/01.mp4",
+      "shot_duration_sec": 6,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    },
+    {
+      "shot": 2,
+      "title_ja": "朝上の静寂",
+      "caption_ja": "朝霧のヴェール",
+      "caption_en": "Veil of Morning Mist",
+      "video": "videos/vual-editorial-01/veo/02.mp4",
+      "shot_duration_sec": 6,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    },
+    {
+      "shot": 3,
+      "title_ja": "苔むす庭の静寂",
+      "caption_ja": "木漏れ日の静けさ",
+      "caption_en": "The quiet of dappled light",
+      "video": "videos/vual-editorial-01/veo/03.mp4",
+      "shot_duration_sec": 4,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    },
+    {
+      "shot": 4,
+      "title_ja": "路地の灯火",
+      "caption_ja": "路地に灯る影",
+      "caption_en": "Shadows ignite in the lane",
+      "video": "videos/vual-editorial-01/veo/04.mp4",
+      "shot_duration_sec": 4,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    },
+    {
+      "shot": 5,
+      "title_ja": "古道に響く足音",
+      "caption_ja": "古の道を風が纏う",
+      "caption_en": "ancient path, clothed in wind",
+      "video": "videos/vual-editorial-01/veo/05.mp4",
+      "shot_duration_sec": 8,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    },
+    {
+      "shot": 6,
+      "title_ja": "夜明けの水辺にて",
+      "caption_ja": "夜明けへのまなざし",
+      "caption_en": "a gaze towards dawn",
+      "video": "videos/vual-editorial-01/veo/06.mp4",
+      "shot_duration_sec": 6,
+      "products": [
+        { "name": "ボーダーカットソー", "brand": "CLANE", "price": 17600, "currency": "jpy" },
+        { "name": "SHEER AIRY PANTS", "brand": "CLANE", "price": 24200, "currency": "jpy" },
+        { "name": "シューズ", "brand": "VUAL", "price": 1000, "currency": "jpy" },
+        { "name": "かごのバッグ", "brand": "かごの", "price": 50000, "currency": "jpy" }
+      ]
+    }
+  ]
+}

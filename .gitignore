@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+.env
+out
+
+# Media files (too large for git)
+*.mp4
+*.mov
+*.mp3
+*.m4a
