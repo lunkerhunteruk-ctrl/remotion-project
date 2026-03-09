@@ -48,6 +48,7 @@ export const vualDynamicSchema = z.object({
   filmFrame: z.boolean().default(false),
   letterbox: z.boolean().default(false),
   filmEffects: filmEffectsSchema,
+  coverImageUrl: z.string().optional(),
 });
 
 export type EffectLevel = z.infer<typeof effectLevelSchema>;

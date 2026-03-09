@@ -101,7 +101,7 @@ export const EndingCard: React.FC<{
             style={{
               fontFamily:
                 "'Noto Sans JP', 'Noto Sans', sans-serif",
-              fontSize: 24 * s,
+              fontSize: 36 * s,
               fontWeight: 300,
               color: "rgba(255,255,255,0.7)",
               letterSpacing: 6 * s,

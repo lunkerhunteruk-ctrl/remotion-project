@@ -3,6 +3,7 @@ import {
   AbsoluteFill,
   Sequence,
   OffthreadVideo,
+  Img,
   Audio,
   useCurrentFrame,
   useVideoConfig,
@@ -35,6 +36,7 @@ const DEFAULT_EFFECTS = {
  * Calculate total duration in frames from props.
  */
 export function calculateDuration(props: VualDynamicProps): number {
+  const coverFrames = props.coverImageUrl ? 1 : 0;
   const introStyle = props.introStyle || "flatlay";
   const introFrames = props.showIntro ? INTRO_DURATION_MAP[introStyle] : 0;
   const shotFrames = props.shots.reduce(
@@ -42,7 +44,7 @@ export function calculateDuration(props: VualDynamicProps): number {
     0
   );
   const endingFrames = props.showEnding ? ENDING_DURATION_SEC * FPS : 0;
-  return introFrames + shotFrames + endingFrames;
+  return coverFrames + introFrames + shotFrames + endingFrames;
 }
 
 /**
@@ -73,7 +75,11 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
     credits,
     filmFrame,
     letterbox,
+    coverImageUrl,
   } = props;
+
+  // Cover image: 1 frame at the very start (for X/Twitter thumbnail)
+  const coverFrames = coverImageUrl ? 1 : 0;
 
   // Film Print frame mode (always based on 16:9 video)
   const isFilmFrame = !!filmFrame;
@@ -86,11 +92,11 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   const effects = filmEffects || DEFAULT_EFFECTS;
   const cssFilter = getColorChromeFilter(effects.colorChrome);
 
-  // Calculate frame layout
+  // Calculate frame layout (offset by coverFrames)
   const introFrames = showIntro ? INTRO_DURATION_MAP[introStyle || "flatlay"] : 0;
   const shotStartFrames: number[] = [];
   const cutFrames: number[] = [];
-  let currentFrame = introFrames;
+  let currentFrame = coverFrames + introFrames;
 
   for (let i = 0; i < shots.length; i++) {
     shotStartFrames.push(currentFrame);
@@ -145,9 +151,19 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
       <div style={contentStyle}>
         <ContentSizeProvider value={{ width: contentWidth, height: contentHeight }}>
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "#000" }}>
+          {/* Cover image (1 frame for X/Twitter thumbnail) */}
+          {coverImageUrl && (
+            <Sequence from={0} durationInFrames={1}>
+              <Img
+                src={coverImageUrl}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </Sequence>
+          )}
+
           {/* Intro */}
           {showIntro && (
-            <Sequence from={0} durationInFrames={introFrames}>
+            <Sequence from={coverFrames} durationInFrames={introFrames}>
               <DynamicIntro
                 introStyle={introStyle || "flatlay"}
                 introText={introText}
@@ -208,7 +224,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
 
           {/* Film effects overlay — shots only */}
           {shots.length > 0 && (
-            <Sequence from={introFrames} durationInFrames={totalShotFrames - introFrames}>
+            <Sequence from={coverFrames + introFrames} durationInFrames={totalShotFrames - coverFrames - introFrames}>
               <FilmEffectsOverlay effects={effects} />
             </Sequence>
           )}

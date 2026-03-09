@@ -9,3 +9,4 @@ out
 *.mov
 *.mp3
 *.m4a
+build/
