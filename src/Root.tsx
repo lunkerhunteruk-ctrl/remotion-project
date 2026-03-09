@@ -217,9 +217,11 @@ export const RemotionRoot: React.FC = () => {
           const durationInFrames = calculateDuration(props);
 
           // Film Print frame
+          console.log("[calculateMetadata]", { filmFrame: props.filmFrame, letterbox: props.letterbox, aspectRatio: props.aspectRatio });
           if (props.filmFrame) {
             // Film Print + letterbox: 4:5 canvas with frame on black background
             if (props.letterbox) {
+              console.log("[calculateMetadata] Film Print IG mode", { width: FILM_FRAME.canvasWidth, height: FILM_FRAME_IG.canvasHeight });
               return { durationInFrames, width: FILM_FRAME.canvasWidth, height: FILM_FRAME_IG.canvasHeight };
             }
             // Standard Film Print: frame only (16:9 + border)

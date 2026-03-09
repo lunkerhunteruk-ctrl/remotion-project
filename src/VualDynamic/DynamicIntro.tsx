@@ -240,6 +240,8 @@ const FlatLayIntroContent: React.FC<{
               textTransform: "uppercase",
               transform: `scale(${textScale})`,
               textShadow: "0 0 40px rgba(255,255,255,0.2)",
+              textAlign: "center",
+              padding: `0 ${60 * s}px`,
             }}
           >
             {introText}
@@ -350,6 +352,8 @@ const TextOnlyIntro: React.FC<{
             color: "#ffffff",
             textTransform: "uppercase",
             textShadow: "0 0 40px rgba(255,255,255,0.15)",
+            textAlign: "center",
+            padding: `0 ${60 * s}px`,
           }}
         >
           {introText}
