@@ -133,7 +133,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
     <AbsoluteFill style={{ backgroundColor: isFilmFrame ? "#f5f0e8" : "#000" }}>
       {/* Video content area */}
       <div style={contentStyle}>
-        <AbsoluteFill style={{ backgroundColor: "#000" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "#000" }}>
           {/* Intro */}
           {showIntro && (
             <Sequence from={0} durationInFrames={introFrames}>
@@ -218,7 +218,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
 
           {/* Fade to black at the end */}
           <FadeToBlack totalFrames={totalShotFrames + endingFrames} />
-        </AbsoluteFill>
+        </div>
       </div>
 
       {/* Film Print frame overlay (top layer) */}
