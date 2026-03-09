@@ -69,15 +69,15 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
     flatLayImageUrls,
     credits,
     filmFrame,
+    letterbox,
   } = props;
 
-  // Letterbox mode: 4:5 canvas with source video fitted inside (no crop)
-  const isLetterbox = aspectRatio === "4:5" && !filmFrame;
-
-  // Film Print frame mode
-  const ar = aspectRatio || "16:9";
-  const isFilmFrame = filmFrame && (ar === "16:9" || ar === "4:5");
-  const isFilmFrameIG = filmFrame && ar === "4:5";
+  // Film Print frame mode (always based on 16:9 video)
+  const isFilmFrame = !!filmFrame;
+  // Film Print + letterbox = 4:5 canvas with frame centered on black background
+  const isFilmFrameIG = isFilmFrame && !!letterbox;
+  // Plain letterbox (no film frame): 4:5 canvas with 16:9 video centered
+  const isLetterbox = !isFilmFrame && (aspectRatio === "4:5" || !!letterbox);
 
   // Film effects
   const effects = filmEffects || DEFAULT_EFFECTS;
@@ -130,7 +130,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   }
 
   return (
-    <AbsoluteFill style={{ backgroundColor: isFilmFrame ? "#f5f0e8" : "#000" }}>
+    <AbsoluteFill style={{ backgroundColor: isFilmFrameIG ? "#000" : isFilmFrame ? "#f5f0e8" : "#000" }}>
       {/* Video content area */}
       <div style={contentStyle}>
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "#000" }}>

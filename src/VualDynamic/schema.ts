@@ -46,6 +46,7 @@ export const vualDynamicSchema = z.object({
   })).optional(),
   aspectRatio: z.enum(["16:9", "9:16", "1:1", "4:3", "3:4", "4:5"]).default("16:9"),
   filmFrame: z.boolean().default(false),
+  letterbox: z.boolean().default(false),
   filmEffects: filmEffectsSchema,
 });
 

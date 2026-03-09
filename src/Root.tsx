@@ -13,6 +13,7 @@ import { TextOverlay03, VUAL_EDITORIAL_03_DURATION } from "./VualEditorial03";
 import { FlatLayIntro, FLATLAY_INTRO_DURATION } from "./VualEditorial03";
 import { VualDynamic, calculateDuration } from "./VualDynamic";
 import { vualDynamicSchema } from "./VualDynamic/schema";
+import { FILM_FRAME, FILM_FRAME_IG } from "./VualDynamic/FilmFrameOverlay";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -206,13 +207,13 @@ export const RemotionRoot: React.FC = () => {
           const durationInFrames = calculateDuration(props);
 
           // Film Print frame
-          if (props.filmFrame && (ar === "16:9" || ar === "4:5")) {
-            // Instagram 4:5: film frame centered in 4:5 canvas
-            if (ar === "4:5") {
-              return { durationInFrames, width: 2084, height: 2605 };
+          if (props.filmFrame) {
+            // Film Print + letterbox: 4:5 canvas with frame on black background
+            if (props.letterbox) {
+              return { durationInFrames, width: FILM_FRAME.canvasWidth, height: FILM_FRAME_IG.canvasHeight };
             }
-            // Standard 16:9: frame only
-            return { durationInFrames, width: 2084, height: 1420 };
+            // Standard Film Print: frame only (16:9 + border)
+            return { durationInFrames, width: FILM_FRAME.canvasWidth, height: FILM_FRAME.canvasHeight };
           }
 
           return { durationInFrames, width: dimensions.width, height: dimensions.height };
