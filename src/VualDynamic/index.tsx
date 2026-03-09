@@ -101,16 +101,32 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
 
   // Content container style: positions video content inside film frame border
   const frameTopOffset = isFilmFrameIG ? FILM_FRAME_IG.frameOffsetY : 0;
-  const contentStyle: React.CSSProperties = isFilmFrame
-    ? {
-        position: "absolute",
-        left: FILM_FRAME.videoLeft,
-        top: frameTopOffset + FILM_FRAME.videoTop,
-        width: FILM_FRAME.videoWidth,
-        height: FILM_FRAME.videoHeight,
-        overflow: "hidden",
-      }
-    : { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
+  let contentStyle: React.CSSProperties;
+  if (isFilmFrame) {
+    contentStyle = {
+      position: "absolute",
+      left: FILM_FRAME.videoLeft,
+      top: frameTopOffset + FILM_FRAME.videoTop,
+      width: FILM_FRAME.videoWidth,
+      height: FILM_FRAME.videoHeight,
+      overflow: "hidden",
+    };
+  } else if (isLetterbox) {
+    // Letterbox: center a 16:9 area within the 4:5 canvas
+    const lbWidth = 1080;
+    const lbHeight = Math.round(lbWidth * 9 / 16); // 608
+    const lbTop = Math.round((1350 - lbHeight) / 2);
+    contentStyle = {
+      position: "absolute",
+      left: 0,
+      top: lbTop,
+      width: lbWidth,
+      height: lbHeight,
+      overflow: "hidden",
+    };
+  } else {
+    contentStyle = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
+  }
 
   return (
     <AbsoluteFill style={{ backgroundColor: isFilmFrame ? "#f5f0e8" : "#000" }}>
@@ -144,7 +160,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isLetterbox ? "contain" : "cover",
+                      objectFit: "cover",
                     }}
                   />
                 </AbsoluteFill>
