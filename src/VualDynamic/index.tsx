@@ -15,7 +15,7 @@ import { EndingCard } from "./EndingCard";
 import { DynamicIntro, INTRO_DURATION_FRAMES } from "./DynamicIntro";
 import { FilmEffectsOverlay, getColorChromeFilter } from "./FilmEffects";
 import { CreditOverlay } from "./CreditOverlay";
-import { FilmFrameOverlay, FILM_FRAME } from "./FilmFrameOverlay";
+import { FilmFrameOverlay, FILM_FRAME, FILM_FRAME_IG } from "./FilmFrameOverlay";
 
 const FPS = 24;
 const ENDING_DURATION_SEC = 3;
@@ -71,10 +71,12 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   } = props;
 
   // Letterbox mode: 4:5 canvas with source video fitted inside (no crop)
-  const isLetterbox = aspectRatio === "4:5";
+  const isLetterbox = aspectRatio === "4:5" && !filmFrame;
 
-  // Film Print frame mode: content is positioned inside the frame border
-  const isFilmFrame = filmFrame && (aspectRatio || "16:9") === "16:9";
+  // Film Print frame mode
+  const ar = aspectRatio || "16:9";
+  const isFilmFrame = filmFrame && (ar === "16:9" || ar === "4:5");
+  const isFilmFrameIG = filmFrame && ar === "4:5";
 
   // Film effects
   const effects = filmEffects || DEFAULT_EFFECTS;
@@ -98,11 +100,12 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   const endingFrames = showEnding ? ENDING_DURATION_SEC * FPS : 0;
 
   // Content container style: positions video content inside film frame border
+  const frameTopOffset = isFilmFrameIG ? FILM_FRAME_IG.frameOffsetY : 0;
   const contentStyle: React.CSSProperties = isFilmFrame
     ? {
         position: "absolute",
         left: FILM_FRAME.videoLeft,
-        top: FILM_FRAME.videoTop,
+        top: frameTopOffset + FILM_FRAME.videoTop,
         width: FILM_FRAME.videoWidth,
         height: FILM_FRAME.videoHeight,
         overflow: "hidden",
@@ -169,7 +172,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
 
                 {/* Credit overlay on last shot */}
                 {i === shots.length - 1 && credits && credits.length > 0 && (
-                  <CreditOverlay credits={credits} durationFrames={dur} />
+                  <CreditOverlay credits={credits} durationFrames={dur} textFont={textFont} />
                 )}
               </Sequence>
             );
@@ -202,7 +205,19 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
       </div>
 
       {/* Film Print frame overlay (top layer) */}
-      {isFilmFrame && <FilmFrameOverlay />}
+      {isFilmFrame && (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: frameTopOffset,
+            width: FILM_FRAME.canvasWidth,
+            height: FILM_FRAME.canvasHeight,
+          }}
+        >
+          <FilmFrameOverlay />
+        </div>
+      )}
 
       {/* BGM */}
       {bgmUrl && (

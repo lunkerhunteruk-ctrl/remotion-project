@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
 import type { VualDynamicProps } from "./schema";
+import { FONT_MAP } from "./fonts";
 
 const FPS = 24;
 const CREDIT_DURATION_SEC = 5;
@@ -16,10 +17,14 @@ const CREDIT_DURATION_FRAMES = CREDIT_DURATION_SEC * FPS; // 120 frames
 export const CreditOverlay: React.FC<{
   credits: NonNullable<VualDynamicProps["credits"]>;
   durationFrames: number;
-}> = ({ credits, durationFrames }) => {
+  textFont?: string;
+}> = ({ credits, durationFrames, textFont = "impact" }) => {
   const frame = useCurrentFrame();
   const { width } = useVideoConfig();
   const s = width / 1920;
+  // Use selected font with Noto Sans JP fallback for Japanese text
+  const baseFontFamily = FONT_MAP[textFont] || FONT_MAP.impact;
+  const fontFamily = `${baseFontFamily}, ${FONT_MAP["noto-sans"]}, sans-serif`;
 
   if (!credits || credits.length === 0) return null;
 
@@ -77,7 +82,7 @@ export const CreditOverlay: React.FC<{
         >
           <div
             style={{
-              fontFamily: "'Helvetica Neue', Arial, sans-serif",
+              fontFamily,
               fontSize: 20 * s,
               fontWeight: 500,
               color: "#ffffff",
@@ -89,7 +94,7 @@ export const CreditOverlay: React.FC<{
           </div>
           <div
             style={{
-              fontFamily: "'Helvetica Neue', Arial, sans-serif",
+              fontFamily,
               fontSize: 16 * s,
               fontWeight: 400,
               color: "rgba(255,255,255,0.8)",

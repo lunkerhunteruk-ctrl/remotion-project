@@ -34,3 +34,10 @@ export const FILM_FRAME = {
   videoWidth: 1924,
   videoHeight: 1086,
 } as const;
+
+/** Instagram 4:5 canvas with film frame centered vertically */
+export const FILM_FRAME_IG = {
+  canvasWidth: 2084,
+  canvasHeight: 2605, // 2084 * 5/4
+  frameOffsetY: 593,  // (2605 - 1420) / 2 rounded
+} as const;

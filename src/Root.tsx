@@ -205,8 +205,13 @@ export const RemotionRoot: React.FC = () => {
           const dimensions = AR_MAP[ar] || AR_MAP["16:9"];
           const durationInFrames = calculateDuration(props);
 
-          // Film Print frame: expand canvas to include border (16:9 only)
-          if (props.filmFrame && ar === "16:9") {
+          // Film Print frame
+          if (props.filmFrame && (ar === "16:9" || ar === "4:5")) {
+            // Instagram 4:5: film frame centered in 4:5 canvas
+            if (ar === "4:5") {
+              return { durationInFrames, width: 2084, height: 2605 };
+            }
+            // Standard 16:9: frame only
             return { durationInFrames, width: 2084, height: 1420 };
           }
 
