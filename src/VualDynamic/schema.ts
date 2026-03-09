@@ -31,13 +31,21 @@ export const vualDynamicSchema = z.object({
   showIntro: z.boolean().default(false),
   introStyle: z.enum(["flatlay", "text-only"]).default("flatlay"),
   introText: z.string().optional(),
+  flatLayImageUrls: z.array(z.string()).optional(),
   locationText: z.string().optional(),
   dateText: z.string().optional(),
   showEnding: z.boolean().default(false),
   whiteFlash: z.boolean().default(true),
   brandName: z.string().optional(),
   tagline: z.string().optional(),
+  credits: z.array(z.object({
+    category: z.string(),
+    name: z.string(),
+    brand: z.string(),
+    price: z.string(),
+  })).optional(),
   aspectRatio: z.enum(["16:9", "9:16", "1:1", "4:3", "3:4", "4:5"]).default("16:9"),
+  filmFrame: z.boolean().default(false),
   filmEffects: filmEffectsSchema,
 });
 

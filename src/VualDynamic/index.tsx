@@ -10,9 +10,12 @@ import {
 import type { VualDynamicProps } from "./schema";
 import { WhiteFlashOverlay } from "./WhiteFlashOverlay";
 import { DynamicTextOverlay } from "./DynamicTextOverlay";
+import { MetadataOverlay } from "./MetadataOverlay";
 import { EndingCard } from "./EndingCard";
 import { DynamicIntro, INTRO_DURATION_FRAMES } from "./DynamicIntro";
 import { FilmEffectsOverlay, getColorChromeFilter } from "./FilmEffects";
+import { CreditOverlay } from "./CreditOverlay";
+import { FilmFrameOverlay, FILM_FRAME } from "./FilmFrameOverlay";
 
 const FPS = 24;
 const ENDING_DURATION_SEC = 3;
@@ -62,10 +65,16 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
     tagline,
     aspectRatio,
     filmEffects,
+    flatLayImageUrls,
+    credits,
+    filmFrame,
   } = props;
 
   // Letterbox mode: 4:5 canvas with source video fitted inside (no crop)
   const isLetterbox = aspectRatio === "4:5";
+
+  // Film Print frame mode: content is positioned inside the frame border
+  const isFilmFrame = filmFrame && (aspectRatio || "16:9") === "16:9";
 
   // Film effects
   const effects = filmEffects || DEFAULT_EFFECTS;
@@ -88,74 +97,112 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   const totalShotFrames = currentFrame;
   const endingFrames = showEnding ? ENDING_DURATION_SEC * FPS : 0;
 
+  // Content container style: positions video content inside film frame border
+  const contentStyle: React.CSSProperties = isFilmFrame
+    ? {
+        position: "absolute",
+        left: FILM_FRAME.videoLeft,
+        top: FILM_FRAME.videoTop,
+        width: FILM_FRAME.videoWidth,
+        height: FILM_FRAME.videoHeight,
+        overflow: "hidden",
+      }
+    : { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
+
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000" }}>
-      {/* Intro */}
-      {showIntro && (
-        <Sequence from={0} durationInFrames={introFrames}>
-          <DynamicIntro
-            introStyle={introStyle || "flatlay"}
-            introText={introText}
-            locationText={locationText}
-            dateText={dateText}
-            textFont={textFont}
-          />
-        </Sequence>
-      )}
-
-      {/* Video shots */}
-      {shots.map((shot, i) => {
-        const dur = shot.durationSec * FPS;
-        return (
-          <Sequence
-            key={`shot-${i}`}
-            from={shotStartFrames[i]}
-            durationInFrames={dur}
-          >
-            <AbsoluteFill style={{ filter: cssFilter }}>
-              <OffthreadVideo
-                src={shot.clipUrl}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: isLetterbox ? "contain" : "cover",
-                }}
+    <AbsoluteFill style={{ backgroundColor: isFilmFrame ? "#f5f0e8" : "#000" }}>
+      {/* Video content area */}
+      <div style={contentStyle}>
+        <AbsoluteFill style={{ backgroundColor: "#000" }}>
+          {/* Intro */}
+          {showIntro && (
+            <Sequence from={0} durationInFrames={introFrames}>
+              <DynamicIntro
+                introStyle={introStyle || "flatlay"}
+                introText={introText}
+                textFont={textFont}
+                flatLayImageUrls={flatLayImageUrls}
               />
-            </AbsoluteFill>
+            </Sequence>
+          )}
 
-            {/* Text overlay per shot */}
-            <DynamicTextOverlay
-              shot={shot}
-              shotIndex={i}
-              localStartFrame={0}
-              durationFrames={dur}
-              textStyle={textStyle}
-              textFont={textFont}
-            />
-          </Sequence>
-        );
-      })}
+          {/* Video shots */}
+          {shots.map((shot, i) => {
+            const dur = shot.durationSec * FPS;
+            return (
+              <Sequence
+                key={`shot-${i}`}
+                from={shotStartFrames[i]}
+                durationInFrames={dur}
+              >
+                <AbsoluteFill style={{ filter: cssFilter }}>
+                  <OffthreadVideo
+                    src={shot.clipUrl}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: isLetterbox ? "contain" : "cover",
+                    }}
+                  />
+                </AbsoluteFill>
 
-      {/* Film effects overlay — shots only */}
-      {shots.length > 0 && (
-        <Sequence from={introFrames} durationInFrames={totalShotFrames - introFrames}>
-          <FilmEffectsOverlay effects={effects} />
-        </Sequence>
-      )}
+                {/* Text overlay per shot */}
+                <DynamicTextOverlay
+                  shot={shot}
+                  shotIndex={i}
+                  localStartFrame={0}
+                  durationFrames={dur}
+                  textStyle={textStyle}
+                  textFont={textFont}
+                />
 
-      {/* White flash at cut points */}
-      {whiteFlash && <WhiteFlashOverlay cutFrames={cutFrames} />}
+                {/* Date & Location on first shot */}
+                {i === 0 && (dateText || locationText) && (
+                  <MetadataOverlay
+                    dateText={dateText}
+                    locationText={locationText}
+                    durationFrames={dur}
+                    textStyle={textStyle}
+                    textFont={textFont}
+                  />
+                )}
 
-      {/* Ending card */}
-      {showEnding && (
-        <Sequence from={totalShotFrames} durationInFrames={endingFrames}>
-          <EndingCard
-            brandName={brandName}
-            tagline={tagline}
-            textFont={textFont}
-          />
-        </Sequence>
-      )}
+                {/* Credit overlay on last shot */}
+                {i === shots.length - 1 && credits && credits.length > 0 && (
+                  <CreditOverlay credits={credits} durationFrames={dur} />
+                )}
+              </Sequence>
+            );
+          })}
+
+          {/* Film effects overlay — shots only */}
+          {shots.length > 0 && (
+            <Sequence from={introFrames} durationInFrames={totalShotFrames - introFrames}>
+              <FilmEffectsOverlay effects={effects} />
+            </Sequence>
+          )}
+
+          {/* White flash at cut points */}
+          {whiteFlash && <WhiteFlashOverlay cutFrames={cutFrames} />}
+
+          {/* Ending card */}
+          {showEnding && (
+            <Sequence from={totalShotFrames} durationInFrames={endingFrames}>
+              <EndingCard
+                brandName={brandName}
+                tagline={tagline}
+                textFont={textFont}
+              />
+            </Sequence>
+          )}
+
+          {/* Fade to black at the end */}
+          <FadeToBlack totalFrames={totalShotFrames + endingFrames} />
+        </AbsoluteFill>
+      </div>
+
+      {/* Film Print frame overlay (top layer) */}
+      {isFilmFrame && <FilmFrameOverlay />}
 
       {/* BGM */}
       {bgmUrl && (
@@ -164,9 +211,6 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
           volume={0.4}
         />
       )}
-
-      {/* Fade to black at the end */}
-      <FadeToBlack totalFrames={totalShotFrames + endingFrames} />
     </AbsoluteFill>
   );
 };

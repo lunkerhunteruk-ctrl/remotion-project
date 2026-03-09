@@ -201,12 +201,16 @@ export const RemotionRoot: React.FC = () => {
             "3:4": { width: 1080, height: 1440 },
             "4:5": { width: 1080, height: 1350 },
           };
-          const dimensions = AR_MAP[props.aspectRatio || "16:9"] || AR_MAP["16:9"];
-          return {
-            durationInFrames: calculateDuration(props),
-            width: dimensions.width,
-            height: dimensions.height,
-          };
+          const ar = props.aspectRatio || "16:9";
+          const dimensions = AR_MAP[ar] || AR_MAP["16:9"];
+          const durationInFrames = calculateDuration(props);
+
+          // Film Print frame: expand canvas to include border (16:9 only)
+          if (props.filmFrame && ar === "16:9") {
+            return { durationInFrames, width: 2084, height: 1420 };
+          }
+
+          return { durationInFrames, width: dimensions.width, height: dimensions.height };
         }}
       />
 

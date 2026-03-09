@@ -102,23 +102,20 @@ const FlatLayItem: React.FC<{
 export const DynamicIntro: React.FC<{
   introStyle: "flatlay" | "text-only";
   introText?: string;
-  locationText?: string;
-  dateText?: string;
   textFont?: string;
+  flatLayImageUrls?: string[];
 }> = ({
   introStyle,
   introText = "FROM FLATLAY TO RUNWAY",
-  locationText,
-  dateText,
   textFont = "impact",
+  flatLayImageUrls,
 }) => {
   if (introStyle === "flatlay") {
     return (
       <FlatLayIntroContent
         introText={introText}
-        locationText={locationText}
-        dateText={dateText}
         textFont={textFont}
+        flatLayImageUrls={flatLayImageUrls}
       />
     );
   }
@@ -126,8 +123,6 @@ export const DynamicIntro: React.FC<{
   return (
     <TextOnlyIntro
       introText={introText}
-      locationText={locationText}
-      dateText={dateText}
       textFont={textFont}
     />
   );
@@ -137,10 +132,9 @@ export const DynamicIntro: React.FC<{
 
 const FlatLayIntroContent: React.FC<{
   introText: string;
-  locationText?: string;
-  dateText?: string;
   textFont: string;
-}> = ({ introText, locationText, dateText, textFont }) => {
+  flatLayImageUrls?: string[];
+}> = ({ introText, textFont, flatLayImageUrls }) => {
   const frame = useCurrentFrame();
   const { width } = useVideoConfig();
   const fontFamily = getFontFamily(textFont);
@@ -183,13 +177,6 @@ const FlatLayIntroContent: React.FC<{
     easing: Easing.out(Easing.cubic),
   });
 
-  // Location/date text appears after intro text
-  const subTextElapsed = textElapsed - 12;
-  const subTextOpacity = interpolate(subTextElapsed, [0, 8], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   // White flash at the end
   const whiteFlashStart = FPS * 4;
   const whiteFlash = interpolate(
@@ -203,8 +190,12 @@ const FlatLayIntroContent: React.FC<{
     <AbsoluteFill style={{ backgroundColor: "transparent" }}>
       <AbsoluteFill style={{ backgroundColor: "#ffffff", opacity: bgOpacity }} />
 
-      {flatLayItems.map((item) => (
-        <FlatLayItem key={item.label} {...item} />
+      {flatLayItems.map((item, idx) => (
+        <FlatLayItem
+          key={item.label}
+          {...item}
+          src={flatLayImageUrls?.[idx] || item.src}
+        />
       ))}
 
       {textElapsed > -2 && (
@@ -248,49 +239,6 @@ const FlatLayIntroContent: React.FC<{
             {introText}
           </div>
 
-          {/* Date & Location */}
-          {(dateText || locationText) && (
-            <div
-              style={{
-                marginTop: 24 * s,
-                opacity: subTextOpacity,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 6,
-              }}
-            >
-              {dateText && (
-                <div
-                  style={{
-                    fontFamily,
-                    fontSize: 28 * s,
-                    fontWeight: 700,
-                    letterSpacing: 8 * s,
-                    color: "rgba(255,255,255,0.85)",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {dateText}
-                </div>
-              )}
-              {locationText && (
-                <div
-                  style={{
-                    fontFamily,
-                    fontSize: 24 * s,
-                    fontWeight: 400,
-                    letterSpacing: 12 * s,
-                    color: "rgba(255,255,255,0.65)",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {locationText}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Bottom line */}
           <div
             style={{
@@ -313,10 +261,8 @@ const FlatLayIntroContent: React.FC<{
 
 const TextOnlyIntro: React.FC<{
   introText: string;
-  locationText?: string;
-  dateText?: string;
   textFont: string;
-}> = ({ introText, locationText, dateText, textFont }) => {
+}> = ({ introText, textFont }) => {
   const frame = useCurrentFrame();
   const { width } = useVideoConfig();
   const fontFamily = getFontFamily(textFont);
@@ -353,19 +299,6 @@ const TextOnlyIntro: React.FC<{
   const lineEnter = 16;
   const lineElapsed = frame - lineEnter;
   const lineWidth = interpolate(lineElapsed, [0, 18], [0, 400 * s], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.cubic),
-  });
-
-  // Sub text (date / location)
-  const subEnter = 28;
-  const subElapsed = frame - subEnter;
-  const subOpacity = interpolate(subElapsed, [0, 10], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const subY = interpolate(subElapsed, [0, 12], [20, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
@@ -422,48 +355,6 @@ const TextOnlyIntro: React.FC<{
           }}
         />
 
-        {/* Date & Location */}
-        {(dateText || locationText) && (
-          <div
-            style={{
-              opacity: subOpacity,
-              transform: `translateY(${subY * s}px)`,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            {dateText && (
-              <div
-                style={{
-                  fontFamily,
-                  fontSize: 30 * s,
-                  fontWeight: 700,
-                  letterSpacing: 10 * s,
-                  color: "rgba(255,255,255,0.85)",
-                  textTransform: "uppercase",
-                }}
-              >
-                {dateText}
-              </div>
-            )}
-            {locationText && (
-              <div
-                style={{
-                  fontFamily,
-                  fontSize: 26 * s,
-                  fontWeight: 400,
-                  letterSpacing: 14 * s,
-                  color: "rgba(255,255,255,0.6)",
-                  textTransform: "uppercase",
-                }}
-              >
-                {locationText}
-              </div>
-            )}
-          </div>
-        )}
       </AbsoluteFill>
 
       {/* White flash transition */}
