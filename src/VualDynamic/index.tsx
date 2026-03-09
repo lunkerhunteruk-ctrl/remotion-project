@@ -12,7 +12,7 @@ import { WhiteFlashOverlay } from "./WhiteFlashOverlay";
 import { DynamicTextOverlay } from "./DynamicTextOverlay";
 import { MetadataOverlay } from "./MetadataOverlay";
 import { EndingCard } from "./EndingCard";
-import { DynamicIntro, INTRO_DURATION_FRAMES } from "./DynamicIntro";
+import { DynamicIntro, INTRO_DURATION_MAP } from "./DynamicIntro";
 import { FilmEffectsOverlay, getColorChromeFilter } from "./FilmEffects";
 import { CreditOverlay } from "./CreditOverlay";
 import { FilmFrameOverlay, FILM_FRAME, FILM_FRAME_IG } from "./FilmFrameOverlay";
@@ -33,7 +33,8 @@ const DEFAULT_EFFECTS = {
  * Calculate total duration in frames from props.
  */
 export function calculateDuration(props: VualDynamicProps): number {
-  const introFrames = props.showIntro ? INTRO_DURATION_FRAMES : 0;
+  const introStyle = props.introStyle || "flatlay";
+  const introFrames = props.showIntro ? INTRO_DURATION_MAP[introStyle] : 0;
   const shotFrames = props.shots.reduce(
     (sum, shot) => sum + shot.durationSec * FPS,
     0
@@ -83,7 +84,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   const cssFilter = getColorChromeFilter(effects.colorChrome);
 
   // Calculate frame layout
-  const introFrames = showIntro ? INTRO_DURATION_FRAMES : 0;
+  const introFrames = showIntro ? INTRO_DURATION_MAP[introStyle || "flatlay"] : 0;
   const shotStartFrames: number[] = [];
   const cutFrames: number[] = [];
   let currentFrame = introFrames;

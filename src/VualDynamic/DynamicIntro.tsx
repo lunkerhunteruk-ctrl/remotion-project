@@ -12,10 +12,14 @@ import { getFontFamily } from "./fonts";
 
 const FPS = 24;
 
-/**
- * Duration of the intro in frames (5 seconds).
- */
-export const INTRO_DURATION_FRAMES = FPS * 5; // 120 frames
+/** Duration of the intro by style */
+export const INTRO_DURATION_MAP = {
+  flatlay: FPS * 5,     // 120 frames (5s)
+  "text-only": FPS * 2.5, // 60 frames (2.5s)
+} as const;
+
+/** Default intro duration (flatlay) for backward compatibility */
+export const INTRO_DURATION_FRAMES = INTRO_DURATION_MAP.flatlay;
 
 // ─── Flatlay Intro ───────────────────────────────────────────────────────────
 
@@ -268,47 +272,49 @@ const TextOnlyIntro: React.FC<{
   const fontFamily = getFontFamily(textFont);
   const s = width / 1920;
 
+  const dur = INTRO_DURATION_MAP["text-only"]; // 60 frames (2.5s)
+
   // Fade in background
-  const bgOpacity = interpolate(frame, [0, 6], [0, 1], {
+  const bgOpacity = interpolate(frame, [0, 4], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
   // Main text slides up
-  const mainTextEnter = 8;
+  const mainTextEnter = 4;
   const mainElapsed = frame - mainTextEnter;
 
-  const mainOpacity = interpolate(mainElapsed, [0, 10], [0, 1], {
+  const mainOpacity = interpolate(mainElapsed, [0, 6], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  const mainY = interpolate(mainElapsed, [0, 14], [40, 0], {
+  const mainY = interpolate(mainElapsed, [0, 8], [40, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
 
-  const mainTracking = interpolate(mainElapsed, [0, 20], [30, 12], {
+  const mainTracking = interpolate(mainElapsed, [0, 12], [30, 12], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
 
   // Decorative line
-  const lineEnter = 16;
+  const lineEnter = 10;
   const lineElapsed = frame - lineEnter;
-  const lineWidth = interpolate(lineElapsed, [0, 18], [0, 400 * s], {
+  const lineWidth = interpolate(lineElapsed, [0, 10], [0, 400 * s], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
   });
 
   // White flash at the end
-  const whiteFlashStart = FPS * 4;
+  const whiteFlashStart = dur - 12; // ~0.5s before end
   const whiteFlash = interpolate(
     frame,
-    [whiteFlashStart, whiteFlashStart + 6, INTRO_DURATION_FRAMES],
+    [whiteFlashStart, whiteFlashStart + 6, dur],
     [0, 1, 1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
