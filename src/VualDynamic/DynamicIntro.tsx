@@ -1,14 +1,13 @@
 import React from "react";
 import {
-  AbsoluteFill,
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
   Easing,
   Img,
   staticFile,
 } from "remotion";
 import { getFontFamily } from "./fonts";
+import { useContentSize } from "./ContentSizeContext";
 
 const FPS = 24;
 
@@ -38,7 +37,7 @@ const FlatLayItem: React.FC<{
   slideFrom: "left" | "right";
 }> = ({ src, enterFrame, col, row, slideFrom }) => {
   const frame = useCurrentFrame();
-  const { width, height } = useVideoConfig();
+  const { width, height } = useContentSize();
   const elapsed = frame - enterFrame;
 
   if (elapsed < -2) return null;
@@ -140,7 +139,7 @@ const FlatLayIntroContent: React.FC<{
   flatLayImageUrls?: string[];
 }> = ({ introText, textFont, flatLayImageUrls }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const fontFamily = getFontFamily(textFont);
   const s = width / 1920; // scale factor relative to 1920 base
 
@@ -190,9 +189,11 @@ const FlatLayIntroContent: React.FC<{
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
+  const fill: React.CSSProperties = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
+
   return (
-    <AbsoluteFill style={{ backgroundColor: "transparent" }}>
-      <AbsoluteFill style={{ backgroundColor: "#ffffff", opacity: bgOpacity }} />
+    <div style={{ ...fill, backgroundColor: "transparent" }}>
+      <div style={{ ...fill, backgroundColor: "#ffffff", opacity: bgOpacity }} />
 
       {flatLayItems.map((item, idx) => (
         <FlatLayItem
@@ -203,12 +204,13 @@ const FlatLayIntroContent: React.FC<{
       ))}
 
       {textElapsed > -2 && (
-        <AbsoluteFill style={{ backgroundColor: "#0a0a0a", opacity: overlayOpacity }} />
+        <div style={{ ...fill, backgroundColor: "#0a0a0a", opacity: overlayOpacity }} />
       )}
 
       {textElapsed > 0 && (
-        <AbsoluteFill
+        <div
           style={{
+            ...fill,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -252,12 +254,12 @@ const FlatLayIntroContent: React.FC<{
               marginTop: 28 * s,
             }}
           />
-        </AbsoluteFill>
+        </div>
       )}
 
       {/* White flash transition */}
-      <AbsoluteFill style={{ backgroundColor: "#ffffff", opacity: whiteFlash }} />
-    </AbsoluteFill>
+      <div style={{ ...fill, backgroundColor: "#ffffff", opacity: whiteFlash }} />
+    </div>
   );
 };
 
@@ -268,7 +270,7 @@ const TextOnlyIntro: React.FC<{
   textFont: string;
 }> = ({ introText, textFont }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const fontFamily = getFontFamily(textFont);
   const s = width / 1920;
 
@@ -319,13 +321,16 @@ const TextOnlyIntro: React.FC<{
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  return (
-    <AbsoluteFill style={{ backgroundColor: "transparent" }}>
-      {/* Dark background */}
-      <AbsoluteFill style={{ backgroundColor: "#0a0a0a", opacity: bgOpacity }} />
+  const fill: React.CSSProperties = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
 
-      <AbsoluteFill
+  return (
+    <div style={{ ...fill, backgroundColor: "transparent" }}>
+      {/* Dark background */}
+      <div style={{ ...fill, backgroundColor: "#0a0a0a", opacity: bgOpacity }} />
+
+      <div
         style={{
+          ...fill,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -361,10 +366,10 @@ const TextOnlyIntro: React.FC<{
           }}
         />
 
-      </AbsoluteFill>
+      </div>
 
       {/* White flash transition */}
-      <AbsoluteFill style={{ backgroundColor: "#ffffff", opacity: whiteFlash }} />
-    </AbsoluteFill>
+      <div style={{ ...fill, backgroundColor: "#ffffff", opacity: whiteFlash }} />
+    </div>
   );
 };

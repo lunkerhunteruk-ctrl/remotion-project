@@ -1,7 +1,8 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, Easing } from "remotion";
 import type { VualDynamicProps } from "./schema";
 import { FONT_MAP } from "./fonts";
+import { useContentSize } from "./ContentSizeContext";
 
 const FPS = 24;
 
@@ -29,8 +30,7 @@ export const MetadataOverlay: React.FC<{
   textStyle: VualDynamicProps["textStyle"];
   textFont: VualDynamicProps["textFont"];
 }> = ({ dateText, locationText, durationFrames, textStyle, textFont }) => {
-  const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const fontFamily = FONT_MAP[textFont] || FONT_MAP.impact;
   const s = width / 1920;
 
@@ -122,7 +122,7 @@ const SlideMetaLine: React.FC<{
   s: number;
 }> = ({ text, enterFrame, exitFrame, yOffset, fontFamily, s }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
 
   const enterElapsed = frame - enterFrame;
   const exitElapsed = frame - exitFrame;

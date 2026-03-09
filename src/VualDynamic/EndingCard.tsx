@@ -1,6 +1,7 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, Easing } from "remotion";
 import { FONT_MAP } from "./fonts";
+import { useContentSize } from "./ContentSizeContext";
 
 /**
  * Ending card with brand name and tagline.
@@ -12,7 +13,7 @@ export const EndingCard: React.FC<{
   textFont: string;
 }> = ({ brandName, tagline, textFont }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const fontFamily = FONT_MAP[textFont] || FONT_MAP.impact;
   const s = width / 1920;
 
@@ -53,10 +54,13 @@ export const EndingCard: React.FC<{
     easing: Easing.out(Easing.cubic),
   });
 
+  const fillStyle: React.CSSProperties = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
+
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0a0a0a" }}>
-      <AbsoluteFill
+    <div style={{ ...fillStyle, backgroundColor: "#0a0a0a" }}>
+      <div
         style={{
+          ...fillStyle,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -107,12 +111,12 @@ export const EndingCard: React.FC<{
             {tagline}
           </div>
         )}
-      </AbsoluteFill>
+      </div>
 
       {/* White flash transition from previous shot */}
-      <AbsoluteFill
-        style={{ backgroundColor: "#ffffff", opacity: whiteFlash }}
+      <div
+        style={{ ...fillStyle, backgroundColor: "#ffffff", opacity: whiteFlash }}
       />
-    </AbsoluteFill>
+    </div>
   );
 };

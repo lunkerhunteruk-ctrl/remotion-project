@@ -1,7 +1,8 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, Easing } from "remotion";
 import type { VualDynamicProps } from "./schema";
 import { FONT_MAP } from "./fonts";
+import { useContentSize } from "./ContentSizeContext";
 
 const FPS = 24;
 const CREDIT_DURATION_SEC = 5;
@@ -20,7 +21,7 @@ export const CreditOverlay: React.FC<{
   textFont?: string;
 }> = ({ credits, durationFrames, textFont = "impact" }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const s = width / 1920;
   // Use selected font with Noto Sans JP fallback for Japanese text
   const baseFontFamily = FONT_MAP[textFont] || FONT_MAP.impact;

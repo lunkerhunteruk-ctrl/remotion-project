@@ -1,7 +1,8 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, Easing } from "remotion";
 import type { VualDynamicProps, ShotConfig } from "./schema";
 import { FONT_MAP } from "./fonts";
+import { useContentSize } from "./ContentSizeContext";
 
 /**
  * Position map for telop placement (base values at 1920px width).
@@ -26,7 +27,7 @@ const SlideTextLine: React.FC<{
   s: number;
 }> = ({ text, startFrame, fromDirection, fontSize, yOffset, fontFamily, s }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width } = useContentSize();
   const elapsed = frame - startFrame;
   if (elapsed < -5) return null;
 
@@ -135,7 +136,7 @@ export const DynamicTextOverlay: React.FC<{
   textFont: VualDynamicProps["textFont"];
 }> = ({ shot, shotIndex, localStartFrame, durationFrames, textStyle, textFont }) => {
   const frame = useCurrentFrame();
-  const { height: canvasH, width: canvasW } = useVideoConfig();
+  const { width: canvasW, height: canvasH } = useContentSize();
   const fontFamily = FONT_MAP[textFont] || FONT_MAP.impact;
   const s = canvasW / 1920;
 

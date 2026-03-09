@@ -5,6 +5,7 @@ import {
   OffthreadVideo,
   Audio,
   useCurrentFrame,
+  useVideoConfig,
   interpolate,
 } from "remotion";
 import type { VualDynamicProps } from "./schema";
@@ -16,6 +17,7 @@ import { DynamicIntro, INTRO_DURATION_MAP } from "./DynamicIntro";
 import { FilmEffectsOverlay, getColorChromeFilter } from "./FilmEffects";
 import { CreditOverlay } from "./CreditOverlay";
 import { FilmFrameOverlay, FILM_FRAME, FILM_FRAME_IG } from "./FilmFrameOverlay";
+import { ContentSizeProvider } from "./ContentSizeContext";
 
 const FPS = 24;
 const ENDING_DURATION_SEC = 3;
@@ -50,6 +52,7 @@ export function calculateDuration(props: VualDynamicProps): number {
  * Designed to be rendered via Remotion Lambda with serialized inputProps.
  */
 export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
+  const { width: compositionWidth, height: compositionHeight } = useVideoConfig();
   const {
     shots,
     textStyle,
@@ -103,29 +106,36 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
   // Content container style: positions video content inside film frame border
   const frameTopOffset = isFilmFrameIG ? FILM_FRAME_IG.frameOffsetY : 0;
   let contentStyle: React.CSSProperties;
+  let contentWidth: number;
+  let contentHeight: number;
   if (isFilmFrame) {
+    contentWidth = FILM_FRAME.videoWidth;
+    contentHeight = FILM_FRAME.videoHeight;
     contentStyle = {
       position: "absolute",
       left: FILM_FRAME.videoLeft,
       top: frameTopOffset + FILM_FRAME.videoTop,
-      width: FILM_FRAME.videoWidth,
-      height: FILM_FRAME.videoHeight,
+      width: contentWidth,
+      height: contentHeight,
       overflow: "hidden",
     };
   } else if (isLetterbox) {
     // Letterbox: center a 16:9 area within the 4:5 canvas
-    const lbWidth = 1080;
-    const lbHeight = Math.round(lbWidth * 9 / 16); // 608
-    const lbTop = Math.round((1350 - lbHeight) / 2);
+    contentWidth = 1080;
+    contentHeight = Math.round(contentWidth * 9 / 16); // 608
+    const lbTop = Math.round((1350 - contentHeight) / 2);
     contentStyle = {
       position: "absolute",
       left: 0,
       top: lbTop,
-      width: lbWidth,
-      height: lbHeight,
+      width: contentWidth,
+      height: contentHeight,
       overflow: "hidden",
     };
   } else {
+    // Default: use composition size (no frame offset)
+    contentWidth = compositionWidth;
+    contentHeight = compositionHeight;
     contentStyle = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" };
   }
 
@@ -133,6 +143,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
     <AbsoluteFill style={{ backgroundColor: isFilmFrameIG ? "#000" : isFilmFrame ? "#f5f0e8" : "#000" }}>
       {/* Video content area */}
       <div style={contentStyle}>
+        <ContentSizeProvider value={{ width: contentWidth, height: contentHeight }}>
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "#000" }}>
           {/* Intro */}
           {showIntro && (
@@ -219,6 +230,7 @@ export const VualDynamic: React.FC<VualDynamicProps> = (props) => {
           {/* Fade to black at the end */}
           <FadeToBlack totalFrames={totalShotFrames + endingFrames} />
         </div>
+        </ContentSizeProvider>
       </div>
 
       {/* Film Print frame overlay (top layer) */}

@@ -192,6 +192,16 @@ export const RemotionRoot: React.FC = () => {
           showEnding: true,
           brandName: "VUAL",
           tagline: "AI Fashion Editorial",
+          aspectRatio: "16:9",
+          filmFrame: false,
+          letterbox: false,
+          filmEffects: {
+            vignette: "off",
+            colorChrome: "off",
+            colorChromeBlue: "off",
+            grain: "off",
+            colorShift: "off",
+          },
         }}
         calculateMetadata={async ({ props }) => {
           const AR_MAP: Record<string, { width: number; height: number }> = {
